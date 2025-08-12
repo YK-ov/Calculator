@@ -52,7 +52,7 @@ public class CalculatorController {
         handleNumberButtons();
     }
 
-    private void handleNumberButtons(){
+    private void handleNumberButtons() {
         buttonZero.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -107,7 +107,8 @@ public class CalculatorController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "5";
-                outputField.setText(writtenOutput);;
+                outputField.setText(writtenOutput);
+                ;
 
                 System.out.println("used five");
             }
@@ -189,72 +190,24 @@ public class CalculatorController {
         });
 
 
-
     }
 
-    private void calculate(){
-        String toCalculate = outputField.getText();;
-        int result = 0;
-        List<Integer> numbers = new ArrayList<>();
-        List<String> operations = new ArrayList<>();
-
-        String newComma = toCalculate.replaceAll("[^0-9]",",");
-        String[] parts = newComma.split(",");
-
-        for (int i = 0; i < parts.length; i++) {
-            numbers.add(Integer.parseInt(parts[i]));
-        }
+    private void calculate() {
+        String toCalculate = outputField.getText();
+        //int result = 0;
+        String[] operations = toCalculate.split("[0-9]+");
+        String[] numbers = toCalculate.split("[+-]");
+        int result = Integer.parseInt(numbers[0]);
 
 
-
-        for (int i = 0; i < toCalculate.length(); i++) {
-            if (toCalculate.charAt(i) == '+') {
-                operations.add("+");
-            }
-            if (toCalculate.charAt(i) == '-') {
-                operations.add("-");
-            }
-        }
-        System.out.println(operations);
-        Iterator<Integer> iterator = numbers.iterator();
-      //  for (int i = 0; i < numbers.size(); i++) {
-            //System.out.println(numbers.get(i) + " from simple loop");
-//            if (i != numbers.size() - 1) {
-//                System.out.println(numbers.get(i) + " not lasts");
-//            }
-//
-//            if (i == numbers.size() - 1) {
-//                System.out.println(numbers.get(i) + " last");
-//            }
-//        }
-        List<Integer> solvedList = new ArrayList<>();
-        int firstResult = 0;
-
-            for (int i = 0; i < operations.size(); i++) {
-                if (operations.get(i).equals("+")) {
-                    //System.out.println(numbers.get(i) + "+");
-                    //result = numbers.get(i) + numbers.get(i + 1);
-                    for (int j = 0; j < numbers.size(); j++) {
-                        System.out.println((numbers.get(j).toString() + operations.get(i) + numbers.get(j+1)) + " debug statement");
-                        if ((numbers.get(j).toString() + operations.get(i) + numbers.get(j+1).toString()).equals(outputField.getText())) {
-                            System.out.println(numbers.get(j) + numbers.get(j+1) + " inside if");
-                        }
-                        break;
-
-//                        if ((numbers.get(j).toString() + operations.get(i)).equals(outputField.getText())) {
-//                            System.out.println(numbers.get(j));
-//                            break;
-//                        }
-//                        System.out.println(numbers.get(j));
-
-                    }
+            for (int i = 1; i < operations.length; i++) {
+                if(operations[i].equals("+")) {
+                    result = result + Integer.parseInt(numbers[i]);
+                }
+                if(operations[i].equals("-")) {
+                    result = result - Integer.parseInt(numbers[i]);
                 }
             }
-
-            }
-
-            //System.out.println(numbers + " list in the end");
-
-        //System.out.println(result + " in the end");
-
-        }
+        outputField.setText(String.valueOf(result));
+    }
+}
