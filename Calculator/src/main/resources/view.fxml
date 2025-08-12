@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/17.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.CalculatorController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="708.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.CalculatorController">
    <children>
       <Button fx:id="buttonOne" layoutX="123.0" layoutY="584.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="1">
          <font>
@@ -70,6 +69,16 @@
          </font>
       </Button>
       <Button fx:id="buttonEquals" layoutX="453.0" layoutY="111.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="=">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonMultiply" layoutX="123.0" layoutY="111.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="*">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonDivide" layoutX="342.0" layoutY="111.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="/">
          <font>
             <Font size="31.0" />
          </font>

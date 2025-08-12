@@ -39,6 +39,10 @@ public class CalculatorController {
     private Button buttonEquals;
     @FXML
     private TextField outputField;
+    @FXML
+    private Button buttonMultiply;
+    @FXML
+    private Button buttonDivide;
 
     private String writtenOutput = "";
     private int firstNumber = 0;
@@ -158,7 +162,7 @@ public class CalculatorController {
 
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (!outputField.getText().substring(outputField.getText().length() - 1).equals("+") && !outputField.getText().substring(outputField.getText().length() - 1).equals("-")) {  // checking if last character of a user input String is equal + and if it is already then input won't change (cant be something like 1 +++ and if previous character is not equal - so (55-+1000 for example) is not possible either
+                if (!outputField.getText().substring(outputField.getText().length() - 1).equals("*") && !outputField.getText().substring(outputField.getText().length() - 1).equals("/") && !outputField.getText().substring(outputField.getText().length() - 1).equals("+")) {  // checking if last character of a user input String is equal + and if it is already then input won't change (cant be something like 1 +++ and if previous character is not equal - so (55-+1000 for example) is not possible either
                     writtenOutput = outputField.getText() + "+";
                     outputField.setText(writtenOutput);
                 }
@@ -171,7 +175,7 @@ public class CalculatorController {
 
             @Override
             public void handle(ActionEvent actionEvent) {
-                if (!outputField.getText().substring(outputField.getText().length() - 1).equals("-")) {
+                if (outputField.getText().isEmpty() || !outputField.getText().substring(outputField.getText().length() - 1).equals("-")) {
                     writtenOutput = outputField.getText() + "-";
                     outputField.setText(writtenOutput);
                 }
@@ -189,25 +193,66 @@ public class CalculatorController {
             }
         });
 
+        buttonMultiply.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (!outputField.getText().substring(outputField.getText().length() - 1).equals("*") && !outputField.getText().substring(outputField.getText().length() - 1).equals("/") && !outputField.getText().substring(outputField.getText().length() - 1).equals("+")) {
+                    writtenOutput = outputField.getText() + "*";
+                    outputField.setText(writtenOutput);
+                }
+
+                System.out.println("used multiply");
+            }
+        });
+
+        buttonDivide.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (!outputField.getText().substring(outputField.getText().length() - 1).equals("*") && !outputField.getText().substring(outputField.getText().length() - 1).equals("/") && !outputField.getText().substring(outputField.getText().length() - 1).equals("+")) {
+                    writtenOutput = outputField.getText() + "/";
+                    outputField.setText(writtenOutput);
+                }
+                System.out.println("used divide");
+            }
+        });
 
     }
 
     private void calculate() {
         String toCalculate = outputField.getText();
-        //int result = 0;
         String[] operations = toCalculate.split("[0-9]+");
-        String[] numbers = toCalculate.split("[+-]");
-        int result = Integer.parseInt(numbers[0]);
+        //String[] numbers = toCalculate.split("\\\\+?\\\\d+|\\\\-?\\\\d+");
+        double result = 0.0;
 
+        String[] numbers = toCalculate.split("[+-/*]");
+        if (toCalculate.substring(0,1).equals("-")) {
+            toCalculate = toCalculate.substring(1);  // remove first character of a String
+            numbers = toCalculate.split("[+-/*]");
+            result = Double.parseDouble(numbers[0]) * (-1);
+        }
+        else {
+            result = Double.parseDouble(numbers[0]);
+        }
 
             for (int i = 1; i < operations.length; i++) {
+                if(operations[i].equals("/")) {
+                    if (Integer.parseInt(numbers[i]) == 0) {
+                        System.out.println("cant devide by zero");
+                    }
+                    result = result / Double.parseDouble(numbers[i]);
+
+                }
+                if(operations[i].equals("*")) {
+                    result = result * Double.parseDouble(numbers[i]);
+                }
                 if(operations[i].equals("+")) {
-                    result = result + Integer.parseInt(numbers[i]);
+                    result = result + Double.parseDouble(numbers[i]);
                 }
                 if(operations[i].equals("-")) {
-                    result = result - Integer.parseInt(numbers[i]);
+                    result = result - Double.parseDouble(numbers[i]);
                 }
             }
+
         outputField.setText(String.valueOf(result));
     }
 }
