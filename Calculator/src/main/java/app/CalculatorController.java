@@ -223,6 +223,7 @@ public class CalculatorController {
         String[] operations = toCalculate.split("[0-9]+");
         //String[] numbers = toCalculate.split("\\\\+?\\\\d+|\\\\-?\\\\d+");
         double result = 0.0;
+        double divisionResult = 0.0;
 
         String[] numbers = toCalculate.split("[+-/*]");
         if (toCalculate.substring(0,1).equals("-")) {
@@ -236,17 +237,38 @@ public class CalculatorController {
 
             for (int i = 1; i < operations.length; i++) {
                 if(operations[i].equals("/")) {
+                    System.out.println(Double.parseDouble(numbers[i]));
                     if (Integer.parseInt(numbers[i]) == 0) {
                         System.out.println("cant devide by zero");
                     }
-                    result = result / Double.parseDouble(numbers[i]);
-
+                    //if (i != operations.length - 1 && i != 1) {
+                    //    System.out.println("division not after first and not before last");
+                    //}
+                    System.out.println(numbers[i] + " current number for division");
+                    System.out.println(numbers[i-1] + " / " + numbers[i]);
+                    divisionResult = Double.parseDouble(numbers[i-1]) / (Double.parseDouble(numbers[i]));
+                    //System.out.println(divisionResult + " result of division");
+                   // result = result / Double.parseDouble(numbers[i]);
+                    numbers[i] = Double.toString(divisionResult);
                 }
                 if(operations[i].equals("*")) {
                     result = result * Double.parseDouble(numbers[i]);
                 }
                 if(operations[i].equals("+")) {
-                    result = result + Double.parseDouble(numbers[i]);
+                    //result = result + Double.parseDouble(numbers[i]);
+                    System.out.println(numbers[i] + " current number for addition");
+                    if (divisionResult != 0.0) {
+                        System.out.println(divisionResult + " div esult");
+                        System.out.println("division detected");
+                        System.out.println("number we add division to is below");
+                        System.out.println(Double.parseDouble(numbers[i]));
+                        result = divisionResult + Double.parseDouble(numbers[i]);
+                    }
+                    else {
+                        result = result + Double.parseDouble(numbers[i]);
+                    }
+
+                    //result = result + Double.parseDouble(numbers[i]) + divisionResult;
                 }
                 if(operations[i].equals("-")) {
                     result = result - Double.parseDouble(numbers[i]);
