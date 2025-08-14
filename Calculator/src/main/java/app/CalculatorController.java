@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 
 import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class CalculatorController {
     @FXML
@@ -250,24 +249,62 @@ public class CalculatorController {
             firstDivision = true;
         }
 
-        operations = forDetectionFiltered.toArray(new String[0]);
-
-        for (int i = 0; i < operations.length; i++) {
-            if (operations[i].equals("/") && !operations[0].equals("/")) {
-                //String temp = numbers[0];
-                System.out.println("entered if");
-
-                divisionResult = Double.parseDouble(numbers[i-1]) / Double.parseDouble(numbers[i]);
-                numbers[i-1] = Double.toString(divisionResult);
-                //numbers[i] = Double.toString(divisionResult);
-                remove(numbers, i);
-
-                //numbers[0] = temp;
+        int counterOfDivisions = 0;
+        for (int i = 0; i < forDetectionFiltered.size(); i++) {
+            System.out.println(forDetectionFiltered.get(i));
+            if (forDetectionFiltered.get(i).contains("/") && i != 0) {
+                counterOfDivisions++;
             }
         }
 
-        for (int i = 0; i < numbers.length; i++) {
-            System.out.println(numbers[i] + " modified numbers");
+        System.out.println(counterOfDivisions + " amount of divisions");
+        operations = forDetectionFiltered.toArray(new String[0]);
+
+       // String[] newNumbers = new String[counterOfDivisions];
+
+        boolean divisionActive = false;
+        for (int i = 0; i < operations.length; i++) {
+            if (operations[i].equals("/") && i != 0) {
+                divisionActive = true;
+            }
+        }
+        int newNumbersSize = 0;
+
+        if (divisionActive == true) {
+            newNumbersSize = counterOfDivisions;
+        }
+        else {
+            newNumbersSize = numbers.length;
+        }
+        System.out.println(newNumbersSize + " newNumber size");
+
+        String[] newNumbers = new String[newNumbersSize];
+
+        for (int i = 0; i < operations.length; i++) {
+            if (divisionActive == true) {
+                if (operations[i].equals("/") && i != 0) {
+                    //String temp = numbers[0];
+                    System.out.println("entered if");
+
+                    System.out.println(numbers[i] + " /" + numbers[i + 1]);
+                    divisionResult = Double.parseDouble(numbers[i]) / Double.parseDouble(numbers[i + 1]);
+                    numbers[i] = Double.toString(divisionResult);
+                    //numbers[i] = Double.toString(divisionResult);
+                    newNumbers = removeWords(numbers, i + 1);
+                    //numbers[0] = temp;
+                }
+            }
+        }
+
+        if (divisionActive == false) {
+            for (int i = 0; i < newNumbersSize; i++) {
+                newNumbers[i] = numbers[i];
+            }
+        }
+
+
+        for (int i = 0; i < newNumbers.length; i++) {
+            System.out.println(newNumbers[i] + " modified numbers");
         }
 
 
@@ -277,15 +314,15 @@ public class CalculatorController {
             for (int i = 0; i < operations.length; i++) {
                 if(firstDivision == true) {
                     System.out.println("case first division");
-                    if (Double.parseDouble(numbers[i]) == 0) {
+                    if (Double.parseDouble(newNumbers[i]) == 0) {
                         System.out.println("cant devide by zero");
                     }
                     System.out.println("division in the very beginning");
-                    System.out.println(result + " / " + Double.parseDouble(numbers[i]) + " being calculated");
-                    result = result / Double.parseDouble(numbers[i]);
+                    System.out.println(result + " / " + Double.parseDouble(newNumbers[i]) + " being calculated");
+                    result = result / Double.parseDouble(newNumbers[i+1]);
                 }
                 if(operations[i].equals("*")) {
-                    result = result * Double.parseDouble(numbers[i]);
+                    result = result * Double.parseDouble(newNumbers[i]);
                 }
                 if(operations[i].equals("+")) {
                     //result = result + Double.parseDouble(numbers[i]);
@@ -303,15 +340,15 @@ public class CalculatorController {
 */
                     //System.out.println(result + " + " + numbers[i]);
                     //System.out.println(Double.parseDouble(numbers[i]) + " number added parsed");
-                    System.out.println(numbers[i] + " inside plus");
+                    System.out.println(newNumbers[i] + " inside plus");
                     System.out.println(result + " result in loop");
-                    System.out.println(numbers[i] + " inside plus");
-                    System.out.println(result + " + " + Double.parseDouble(numbers[i]));
-                    result = result + Double.parseDouble(numbers[i+1]); // + divisionResult;
+                    System.out.println(newNumbers[i] + " inside plus");
+                    System.out.println(result + " + " + Double.parseDouble(newNumbers[i+1]));
+                    result = result + Double.parseDouble(newNumbers[i+1]); // + divisionResult;
                     System.out.println(result + " result in an if");
                 }
                 if(operations[i].equals("-")) {
-                    result = result - Double.parseDouble(numbers[i]);
+                    result = result - Double.parseDouble(newNumbers[i]);
                 }
             }
             for (int i = 0; i < operations.length; i++) {
@@ -322,28 +359,21 @@ public class CalculatorController {
 
     }
 
-    public Object[] remove(Object[] array, Object element) {
-        if (array.length > 0) {
-            int index = -1;
-            for (int i = 0; i < array.length; i++) {
-                if (array[i].equals(element)) {
-                    index = i;
-                    break;
-                }
-            }
-            if (index >= 0) {
-                Object[] copy = (Object[]) Array.newInstance(array.getClass()
-                        .getComponentType(), array.length - 1);
-                if (copy.length > 0) {
-                    System.arraycopy(array, 0, copy, 0, index);
-                    System.arraycopy(array, index + 1, copy, index, copy.length - index);
-                }
-                return copy;
+    public static String[] removeWords(String[] array, int indexToDelete) {
+        String[] smallerArray = new String[array.length - 1];
+
+        int indexSmallerArray = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            if (i != indexToDelete) {
+                smallerArray[indexSmallerArray] = array[i];
+                indexSmallerArray++;
             }
         }
-        return array;
-    }
 
+    return smallerArray;
+
+    }
 
 
 }
