@@ -6,9 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CalculatorController {
     @FXML
@@ -224,8 +224,11 @@ public class CalculatorController {
         //String[] numbers = toCalculate.split("\\\\+?\\\\d+|\\\\-?\\\\d+");
         double result = 0.0;
         double divisionResult = 0.0;
+        boolean firstDivision = false;
 
-        String[] numbers = toCalculate.split("[+-/*]");
+        //String[] numbers = toCalculate.split("[+-/*]");
+        String[] numbers = toCalculate.split("[+\\-*/]");
+
         if (toCalculate.substring(0,1).equals("-")) {
             toCalculate = toCalculate.substring(1);  // remove first character of a String
             numbers = toCalculate.split("[+-/*]");
@@ -235,28 +238,58 @@ public class CalculatorController {
             result = Double.parseDouble(numbers[0]);
         }
 
-            for (int i = 1; i < operations.length; i++) {
-                if(operations[i].equals("/")) {
-                    System.out.println(Double.parseDouble(numbers[i]));
-                    if (Integer.parseInt(numbers[i]) == 0) {
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.println(numbers[i] + " unmodified numbers");
+        }
+
+        List<String> forDetection = new ArrayList<>(Arrays.asList(operations));
+        List<String> forDetectionFiltered = forDetection.stream().filter( x -> x.equals("/") || x.equals("+") || x.equals("-") || x.equals("*")).toList();
+
+
+        if (forDetectionFiltered.getFirst().equals("/")){
+            firstDivision = true;
+        }
+
+        operations = forDetectionFiltered.toArray(new String[0]);
+
+        for (int i = 0; i < operations.length; i++) {
+            if (operations[i].equals("/") && !operations[0].equals("/")) {
+                //String temp = numbers[0];
+                System.out.println("entered if");
+
+                divisionResult = Double.parseDouble(numbers[i-1]) / Double.parseDouble(numbers[i]);
+                numbers[i-1] = Double.toString(divisionResult);
+                //numbers[i] = Double.toString(divisionResult);
+                remove(numbers, i);
+
+                //numbers[0] = temp;
+            }
+        }
+
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.println(numbers[i] + " modified numbers");
+        }
+
+
+        System.out.println(operations.length + " len");
+        System.out.println(result + " result regestered");
+
+            for (int i = 0; i < operations.length; i++) {
+                if(firstDivision == true) {
+                    System.out.println("case first division");
+                    if (Double.parseDouble(numbers[i]) == 0) {
                         System.out.println("cant devide by zero");
                     }
-                    //if (i != operations.length - 1 && i != 1) {
-                    //    System.out.println("division not after first and not before last");
-                    //}
-                    System.out.println(numbers[i] + " current number for division");
-                    System.out.println(numbers[i-1] + " / " + numbers[i]);
-                    divisionResult = Double.parseDouble(numbers[i-1]) / (Double.parseDouble(numbers[i]));
-                    //System.out.println(divisionResult + " result of division");
-                   // result = result / Double.parseDouble(numbers[i]);
-                    numbers[i] = Double.toString(divisionResult);
+                    System.out.println("division in the very beginning");
+                    System.out.println(result + " / " + Double.parseDouble(numbers[i]) + " being calculated");
+                    result = result / Double.parseDouble(numbers[i]);
                 }
                 if(operations[i].equals("*")) {
                     result = result * Double.parseDouble(numbers[i]);
                 }
                 if(operations[i].equals("+")) {
                     //result = result + Double.parseDouble(numbers[i]);
-                    System.out.println(numbers[i] + " current number for addition");
+                  /*  System.out.println(numbers[i] + " current number for addition");
                     if (divisionResult != 0.0) {
                         System.out.println(divisionResult + " div esult");
                         System.out.println("division detected");
@@ -267,14 +300,50 @@ public class CalculatorController {
                     else {
                         result = result + Double.parseDouble(numbers[i]);
                     }
-
-                    //result = result + Double.parseDouble(numbers[i]) + divisionResult;
+*/
+                    //System.out.println(result + " + " + numbers[i]);
+                    //System.out.println(Double.parseDouble(numbers[i]) + " number added parsed");
+                    System.out.println(numbers[i] + " inside plus");
+                    System.out.println(result + " result in loop");
+                    System.out.println(numbers[i] + " inside plus");
+                    System.out.println(result + " + " + Double.parseDouble(numbers[i]));
+                    result = result + Double.parseDouble(numbers[i+1]); // + divisionResult;
+                    System.out.println(result + " result in an if");
                 }
                 if(operations[i].equals("-")) {
                     result = result - Double.parseDouble(numbers[i]);
                 }
             }
+            for (int i = 0; i < operations.length; i++) {
+                System.out.println(operations[i] + " operations after calculations");
+            }
 
         outputField.setText(String.valueOf(result));
+
     }
+
+    public Object[] remove(Object[] array, Object element) {
+        if (array.length > 0) {
+            int index = -1;
+            for (int i = 0; i < array.length; i++) {
+                if (array[i].equals(element)) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                Object[] copy = (Object[]) Array.newInstance(array.getClass()
+                        .getComponentType(), array.length - 1);
+                if (copy.length > 0) {
+                    System.arraycopy(array, 0, copy, 0, index);
+                    System.arraycopy(array, index + 1, copy, index, copy.length - index);
+                }
+                return copy;
+            }
+        }
+        return array;
+    }
+
+
+
 }
