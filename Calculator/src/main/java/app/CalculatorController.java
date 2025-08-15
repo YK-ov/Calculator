@@ -228,6 +228,7 @@ public class CalculatorController {
         //String[] numbers = toCalculate.split("[+-/*]");
         String[] numbers = toCalculate.split("[+\\-*/]");
 
+        /*  MODIFIED FOR A CHANGE
         if (toCalculate.substring(0,1).equals("-")) {
             toCalculate = toCalculate.substring(1);  // remove first character of a String
             numbers = toCalculate.split("[+-/*]");
@@ -241,6 +242,8 @@ public class CalculatorController {
             System.out.println(numbers[i] + " unmodified numbers");
         }
 
+         */
+
         List<String> forDetection = new ArrayList<>(Arrays.asList(operations));
         List<String> forDetectionFiltered = forDetection.stream().filter( x -> x.equals("/") || x.equals("+") || x.equals("-") || x.equals("*")).toList();
 
@@ -252,7 +255,7 @@ public class CalculatorController {
         int counterOfDivisions = 0;
         for (int i = 0; i < forDetectionFiltered.size(); i++) {
             System.out.println(forDetectionFiltered.get(i));
-            if (forDetectionFiltered.get(i).contains("/") && i != 0) {
+            if (forDetectionFiltered.get(i).contains("/") && operations.length > 1) {  // operations.lenght > 1 the change
                 counterOfDivisions++;
             }
         }
@@ -264,7 +267,7 @@ public class CalculatorController {
 
         boolean divisionActive = false;
         for (int i = 0; i < operations.length; i++) {
-            if (operations[i].equals("/") && i != 0) {
+            if (operations[i].equals("/") && operations.length > 1) {  // operations.lenght > 1 the change
                 divisionActive = true;
             }
         }
@@ -282,7 +285,7 @@ public class CalculatorController {
 
         for (int i = 0; i < operations.length; i++) {
             if (divisionActive == true) {
-                if (operations[i].equals("/") && i != 0) {
+                if (operations[i].equals("/")) {
                     //String temp = numbers[0];
                     System.out.println("entered if");
 
@@ -307,22 +310,35 @@ public class CalculatorController {
             System.out.println(newNumbers[i] + " modified numbers");
         }
 
+        if (toCalculate.substring(0,1).equals("-")) {
+            toCalculate = toCalculate.substring(1);  // remove first character of a String
+            numbers = toCalculate.split("[+-/*]");
+            result = Double.parseDouble(newNumbers[0]) * (-1);
+        }
+        else {
+            result = Double.parseDouble(newNumbers[0]);
+        }
+
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.println(numbers[i] + " unmodified numbers");
+        }
+
 
         System.out.println(operations.length + " len");
         System.out.println(result + " result regestered");
 
             for (int i = 0; i < operations.length; i++) {
-                if(firstDivision == true) {
+                if(operations[i].equals("/") && operations.length == 1) {
                     System.out.println("case first division");
                     if (Double.parseDouble(newNumbers[i]) == 0) {
                         System.out.println("cant devide by zero");
                     }
                     System.out.println("division in the very beginning");
-                    System.out.println(result + " / " + Double.parseDouble(newNumbers[i]) + " being calculated");
+                    System.out.println(result + " / " + Double.parseDouble(newNumbers[i+1]) + " being calculated");
                     result = result / Double.parseDouble(newNumbers[i+1]);
                 }
                 if(operations[i].equals("*")) {
-                    result = result * Double.parseDouble(newNumbers[i]);
+                    result = result * Double.parseDouble(newNumbers[i+1]);
                 }
                 if(operations[i].equals("+")) {
                     //result = result + Double.parseDouble(numbers[i]);
@@ -344,11 +360,11 @@ public class CalculatorController {
                     System.out.println(result + " result in loop");
                     System.out.println(newNumbers[i] + " inside plus");
                     System.out.println(result + " + " + Double.parseDouble(newNumbers[i+1]));
-                    result = result + Double.parseDouble(newNumbers[i+1]); // + divisionResult;
+                    result = result + Double.parseDouble(newNumbers[i+1]); // i + 1 necessary
                     System.out.println(result + " result in an if");
                 }
                 if(operations[i].equals("-")) {
-                    result = result - Double.parseDouble(newNumbers[i]);
+                    result = result - Double.parseDouble(newNumbers[i+1]);
                 }
             }
             for (int i = 0; i < operations.length; i++) {
