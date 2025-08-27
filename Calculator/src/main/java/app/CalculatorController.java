@@ -228,22 +228,6 @@ public class CalculatorController {
         //String[] numbers = toCalculate.split("[+-/*]");
         String[] numbers = toCalculate.split("[+\\-*/]");
 
-        /*  MODIFIED FOR A CHANGE
-        if (toCalculate.substring(0,1).equals("-")) {
-            toCalculate = toCalculate.substring(1);  // remove first character of a String
-            numbers = toCalculate.split("[+-/*]");
-            result = Double.parseDouble(numbers[0]) * (-1);
-        }
-        else {
-            result = Double.parseDouble(numbers[0]);
-        }
-
-        for (int i = 0; i < numbers.length; i++) {
-            System.out.println(numbers[i] + " unmodified numbers");
-        }
-
-         */
-
         List<String> forDetection = new ArrayList<>(Arrays.asList(operations));
         List<String> forDetectionFiltered = forDetection.stream().filter( x -> x.equals("/") || x.equals("+") || x.equals("-") || x.equals("*")).toList();
 
@@ -283,18 +267,24 @@ public class CalculatorController {
 
         String[] newNumbers = new String[newNumbersSize];
 
+        for (int i = 0; i < numbers.length; i++) {
+            System.out.println(numbers[i] + " unmodified numbers");
+        }
+
+        System.out.println(forDetectionFiltered + " filtered operations list");
+
+
         for (int i = 0; i < operations.length; i++) {
             if (divisionActive == true) {
                 if (operations[i].equals("/")) {
-                    //String temp = numbers[0];
                     System.out.println("entered if");
 
                     System.out.println(numbers[i] + " /" + numbers[i + 1]);
+
                     divisionResult = Double.parseDouble(numbers[i]) / Double.parseDouble(numbers[i + 1]);
                     numbers[i] = Double.toString(divisionResult);
-                    //numbers[i] = Double.toString(divisionResult);
                     newNumbers = removeWords(numbers, i + 1);
-                    //numbers[0] = temp;
+
                 }
             }
         }
@@ -305,26 +295,42 @@ public class CalculatorController {
             }
         }
 
-
         for (int i = 0; i < newNumbers.length; i++) {
             System.out.println(newNumbers[i] + " modified numbers");
         }
 
+
         if (toCalculate.substring(0,1).equals("-")) {
             toCalculate = toCalculate.substring(1);  // remove first character of a String
-            numbers = toCalculate.split("[+-/*]");
+            //numbers = toCalculate.split("[+-/*]");
             result = Double.parseDouble(newNumbers[0]) * (-1);
         }
         else {
             result = Double.parseDouble(newNumbers[0]);
         }
 
-        for (int i = 0; i < numbers.length; i++) {
-            System.out.println(numbers[i] + " unmodified numbers");
+        System.out.println(operations.length + " len of operations");
+        for (int i = 0; i < operations.length; i++) {
+            System.out.println(i + " indexation of all operations before a check");
+            System.out.println(operations[i] + " all operations before a check");
         }
 
 
-        System.out.println(operations.length + " len");
+
+        for (int i = 0; i < operations.length; i++) {
+            System.out.println(operations[i] + " before loop stops " + i + "=i");
+            if (operations.length > 1 && operations[i].equals("/") && i+1 < operations.length && operations[i+1].equals("/")) {
+                System.out.println("in a row");
+                System.out.println(result + " / " + newNumbers[i + 1]);
+
+            }
+
+            System.out.println(operations[i] + " all oprtations");
+        }
+
+
+
+
         System.out.println(result + " result regestered");
 
             for (int i = 0; i < operations.length; i++) {
