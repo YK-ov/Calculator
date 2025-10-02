@@ -276,7 +276,7 @@ public class CalculatorController {
         System.out.println(divisionsInRow + " divison in a row counter");
 
         System.out.println(numbers.length + " old numbers");
-        if (divisionActive) {
+        if (divisionActive) { // do for multiplying
             newNumbersSize = numbers.length - counterOfDivisions;
 
 
