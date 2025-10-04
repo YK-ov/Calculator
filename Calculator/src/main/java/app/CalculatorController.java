@@ -295,7 +295,8 @@ public class CalculatorController {
             }
         }
 
-
+        System.out.println(counterOfDivisions + " counter of divisions");
+        System.out.println(counterOfMultiplication + " counter of multiplication");
 
 
         if (divisionActive || multiplicationActive) { // do for multiplying
@@ -382,6 +383,77 @@ public class CalculatorController {
             }
         }
 
+        boolean inRowMultiplicationAndDivision = false;
+        boolean inRowDivisionAndMultiplication = false;
+        int inRowMultiplicationAndDivisionCounter = 0;
+
+
+        List<Integer> indexesOfRowMultiplicationAndDivision = new ArrayList<>();
+        List<Integer> indexesOfRowDivisionAndMultiplication = new ArrayList<>();
+
+        for (int i = 0; i < operationsAndJunk.length; i++) {
+            if (operationsAndJunk[i].equals("*") && operationsAndJunk[i+1].equals("/")){
+                inRowMultiplicationAndDivisionCounter++;
+                inRowMultiplicationAndDivision = true;  // to add check if not active
+                indexesOfRowMultiplicationAndDivision.add(i);
+                indexesOfRowMultiplicationAndDivision.add(i + 1);
+            }
+        }
+
+        for (int i = 0; i < indexesOfRowMultiplicationAndDivision.size(); i++) {
+            if (i < indexesOfRowMultiplicationAndDivision.size() - 1 && indexesOfRowMultiplicationAndDivision.get(i).equals(indexesOfRowMultiplicationAndDivision.get(i+1))){
+                indexesOfRowMultiplicationAndDivision.remove(i);
+            }
+        }
+
+        System.out.println(indexesOfRowMultiplicationAndDivision + " multi then division");
+
+        for (int i = 0; i < operationsAndJunk.length; i++) {
+            if (operationsAndJunk[i].equals("/") && operationsAndJunk[i+1].equals("*")){
+                inRowDivisionAndMultiplication = true;
+                indexesOfRowDivisionAndMultiplication.add(i);
+                indexesOfRowDivisionAndMultiplication.add(i + 1);
+            }
+        }
+
+        for (int i = 0; i < indexesOfRowDivisionAndMultiplication.size(); i++) {
+            if (i < indexesOfRowDivisionAndMultiplication.size() - 1 && indexesOfRowDivisionAndMultiplication.get(i).equals(indexesOfRowDivisionAndMultiplication.get(i+1))){
+                indexesOfRowDivisionAndMultiplication.remove(i);
+            }
+        }
+
+        System.out.println(indexesOfRowDivisionAndMultiplication + " division then multi");
+
+        //String[] afterMultiplicationAndDivisionInRowCheckNumbers = new String[numbers.length - inRowMultiplicationAndDivisionCounter];
+
+        //int toCount = 0;
+        //int resultMultiDivInRow = 0;
+
+//        for (int i = 0; i < operationsAndJunk.length; i++) {  -- to uncomment
+//            if (inRowMultiplicationAndDivision) {
+//                if (operationsAndJunk[i].equals("/") && operationsAndJunk[i+1].equals("*")) {
+//                    System.out.println("entered first div then multi");
+//                    toCount++;
+//                    if (toCount != 1){
+//                        System.out.println(numbers[i] + " numbers[i]");
+//                        System.out.println(numbers[i+1] + " numbers[i+1]");
+//
+//                    }
+//                    else {
+//                        System.out.println(numbers[i] + " numbers[i]");
+//                        System.out.println(numbers[i+1] + " numbers[i+1]");
+//                    }
+//
+//                }
+//            }
+//        }
+
+
+        for (int i = 0; i < indexesOfRowMultiplicationAndDivision.size(); i++) {
+            System.out.println(indexesOfRowMultiplicationAndDivision.get(i) + " indexes of both multi and divi in a row");
+        }
+
+
         System.out.println(indexesOfRowMultiplication + " multiplication indexes of row");
 
 
@@ -454,6 +526,9 @@ public class CalculatorController {
                         }
                     }
                     else {
+
+
+
                         multiplicationResult = Double.parseDouble(numbers[i]) * Double.parseDouble(numbers[i + 1]);
                         numbers[i] = Double.toString(multiplicationResult);
 
@@ -464,7 +539,14 @@ public class CalculatorController {
 
             }
         }
+
+
         System.out.println(multiplicationResult + " multiplication result!!!");
+        for (int i = 0; i < newNumbers.length; i++) {
+            System.out.println(newNumbers[i] + " from new nums array after multiplication");
+        }
+
+
 
 
         for (int i = 0; i < operationsAndJunk.length; i++) {
@@ -513,6 +595,7 @@ public class CalculatorController {
                             int index = indexesOfRow.get(j);
                             newOperationsList.remove(index);
                         }
+
                         System.out.println(newOperationsList + " after");
 
                         for (int j = 0; j < newOperationsList.size(); j++) {
@@ -540,20 +623,51 @@ public class CalculatorController {
                         }
                     }
                     else {
-                        System.out.println("entered else");
-                        System.out.println(numbers[i] + " " + numbers[i + 1] + " index=" + i);
+                        if (newNumbers.length != 0){
+                            System.out.println("entered newNumbers.length != 0");
+                            for (int j = 0; j < newNumbers.length; j++) {
+                                System.out.println(newNumbers[j] + " from N E W nums array");
+                            }
+                            System.out.println(newNumbers[i] + " newNumbers[i]");
 
-                        System.out.println(numbers[i] + " /" + numbers[i + 1]);
+                            divisionResult = Double.parseDouble(newNumbers[i-1]) / Double.parseDouble(newNumbers[i]);
+                            System.out.println(divisionResult + " division result");
+                            newNumbers[i] = String.valueOf(divisionResult);
 
-                        divisionResult = Double.parseDouble(numbers[i]) / Double.parseDouble(numbers[i + 1]);
+                            newNumbers = removeWords(newNumbers, i-1);
 
-                        numbers[i] = Double.toString(divisionResult);
+                            System.out.println(operationsAndJunk[i] + " to remove operation, index=" + i);
+                            newOperationsList.remove(i);
 
-                        newNumbers = removeWords(numbers, i + 1);
+                        }
+                        else {
+                            System.out.println("entered else");
+                            System.out.println(numbers[i] + " " + numbers[i + 1] + " index=" + i);
+
+                            System.out.println(numbers[i] + " /" + numbers[i + 1]);
+
+                            divisionResult = Double.parseDouble(numbers[i]) / Double.parseDouble(numbers[i + 1]);
+
+                            for (int j = 0; j < numbers.length; j++) {
+                                System.out.println(numbers[i] + " numbers nefore numbers[i] = Double.toString(divisionResult)");
+                            }
+
+                            numbers[i] = Double.toString(divisionResult);
+                            for (int j = 0; j < numbers.length; j++) {
+                                System.out.println(numbers[i] + " numbers after numbers[i] = Double.toString(divisionResult)");
+                            }
+
+                            newNumbers = removeWords(numbers, i + 1);
+                        }
                     }
                 }
             }
         }
+
+        for (int i = 0; i< newNumbers.length; i++) {
+            System.out.println(newNumbers[i] + " from new nums array after division");
+        }
+
 
         System.out.println(newNumbers.length + " newNumbers array len");
         for (int i = 0; i < newNumbers.length; i++) {
@@ -588,7 +702,7 @@ public class CalculatorController {
 
         System.out.println(result + " result pre");
 
-        String[] finalOperations = new String[newOperationsList.size()];
+        String[] finalOperations = new String[newOperationsList.size()];  // to fix operations
 
 
         for (int i = 0; i < finalOperations.length; i++) {
@@ -598,6 +712,8 @@ public class CalculatorController {
         for (int i = 0; i < finalOperations.length; i++) {
             System.out.println(finalOperations[i] + " from final operations array");
         }
+        System.out.println(finalOperations.length + " finalOperations array len");
+        System.out.println(newNumbers.length + " newNumbers array len");
 
             for (int i = 0; i < finalOperations.length; i++) {
                 if(finalOperations[i].equals("/") && finalOperations.length == 1) {
@@ -634,6 +750,7 @@ public class CalculatorController {
                     }
                 }
             }
+
             for (int i = 0; i < finalOperations.length; i++) {
                 System.out.println(finalOperations[i] + " operations after calculations");
             }
