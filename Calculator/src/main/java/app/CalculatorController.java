@@ -3,10 +3,10 @@ package app;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class CalculatorController {
@@ -70,8 +70,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "0";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used zero");
             }
         });
 
@@ -80,8 +78,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "1";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used one");
             }
         });
 
@@ -90,8 +86,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "2";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used two");
             }
         });
 
@@ -100,8 +94,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "3";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used three");
             }
         });
 
@@ -110,8 +102,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "4";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used four");
             }
         });
 
@@ -120,9 +110,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "5";
                 outputField.setText(writtenOutput);
-                ;
-
-                System.out.println("used five");
             }
         });
 
@@ -131,8 +118,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "6";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used six");
             }
         });
 
@@ -141,8 +126,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "7";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used seven");
             }
         });
 
@@ -151,8 +134,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "8";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used eight");
             }
         });
 
@@ -161,8 +142,6 @@ public class CalculatorController {
             public void handle(ActionEvent actionEvent) {
                 writtenOutput = outputField.getText() + "9";
                 outputField.setText(writtenOutput);
-
-                System.out.println("used nine");
             }
         });
 
@@ -174,8 +153,6 @@ public class CalculatorController {
                     writtenOutput = outputField.getText() + "+";
                     outputField.setText(writtenOutput);
                 }
-
-                System.out.println("used plus");
             }
         });
 
@@ -187,8 +164,6 @@ public class CalculatorController {
                     writtenOutput = outputField.getText() + "-";
                     outputField.setText(writtenOutput);
                 }
-
-                System.out.println("used minus");
             }
         });
 
@@ -196,8 +171,6 @@ public class CalculatorController {
             @Override
             public void handle(ActionEvent actionEvent) {
                 calculate();
-
-                System.out.println("used equals");
             }
         });
 
@@ -208,8 +181,6 @@ public class CalculatorController {
                     writtenOutput = outputField.getText() + "*";
                     outputField.setText(writtenOutput);
                 }
-
-                System.out.println("used multiply");
             }
         });
 
@@ -220,7 +191,6 @@ public class CalculatorController {
                     writtenOutput = outputField.getText() + "/";
                     outputField.setText(writtenOutput);
                 }
-                System.out.println("used divide");
             }
         });
 
@@ -284,7 +254,6 @@ public class CalculatorController {
 
     private void infixToRpn() {
         RPN = "";
-        System.out.println(outputField.getText());
 
         Stack<Character> stack = new Stack<>();
 
@@ -317,85 +286,85 @@ public class CalculatorController {
         }
 
         while (!stack.isEmpty()) {
-            if (stack.peek() == '('){
-                System.out.println("Invalid expression");
-            }
             RPN = RPN + stack.pop() + " ";
         }
 
         RPN = RPN.trim();
     }
 
-    private double doOperation (double firstNum, double secondNum, char operator) {
-        switch (operator){
-            case '+':
-                return firstNum + secondNum;
-            case '-':
-                return firstNum - secondNum;
-            case '*':
-                return firstNum * secondNum;
-            case '/':
-                return firstNum / secondNum;
-        }
-        return 0;
+    private double doOperation (double firstNum, double secondNum, char operator){
+        DividedByZeroException dividedByZeroException = null;
+            switch (operator) {
+                case '+':
+                    return firstNum + secondNum;
+                case '-':
+                    return firstNum - secondNum;
+                case '*':
+                    return firstNum * secondNum;
+                case '/':
+                    if (secondNum == 0){
+                        throw new DividedByZeroException("Can't divide by 0");
+                    }
+                    else {
+                        return firstNum / secondNum;    
+                    }
+                default:
+                    throw new IllegalArgumentException("Invalid operator");
+            }
+    }
+
+    private void popAlert(String message){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("ERROR!");
+
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 
 
     private void calculate() {
-//        String toCalculate = outputField.getText();
-//        String[] operations = toCalculate.split("[0-9]+");
-//        //String[] numbers = toCalculate.split("\\\\+?\\\\d+|\\\\-?\\\\d+");
-//        double result = 0.0;
-//        double divisionResult = 0.0;
-//        boolean firstDivision = false;
-//        boolean divisionInARow = false;
-//
-//        //String[] numbers = toCalculate.split("[+-/*]");
-//        String[] numbers = toCalculate.split("[+\\-*/]");
-//
-//        List<String> forDetection = new ArrayList<>(Arrays.asList(operations));
-//        List<String> forDetectionFiltered = forDetection.stream().filter(x -> x.equals("/") || x.equals("+") || x.equals("-") || x.equals("*")).toList();
+        try {
 
 
-        infixToRpn();
+            infixToRpn();
 
-        String[] tokens = RPN.split(" ");
+            String[] tokens = RPN.split(" ");
 
-        Stack<Double> stack = new Stack<>();
+            Stack<Double> stack = new Stack<>();
 
-        String expression = RPN;
-        System.out.println(expression + "RNP");
+            String expression = RPN;
 
-        for (int i = 0; i < tokens.length; i++) {
-
-            if (Character.isDigit(tokens[i].charAt(0))) {
-                stack.push(Double.parseDouble(tokens[i]));
-            }
-            else {
-                if (!Character.isDigit(tokens[i].charAt(0)) && !Character.isWhitespace(tokens[i].charAt(0))) {
-                    if (stack.size() < 2){
-                        System.out.println("Invalid expression");
+            for (int i = 0; i < tokens.length; i++) {
+                if (Character.isDigit(tokens[i].charAt(0))) {
+                    stack.push(Double.parseDouble(tokens[i]));
+                } else {
+                    if (!Character.isDigit(tokens[i].charAt(0)) && !Character.isWhitespace(tokens[i].charAt(0))) {
+                        double firstNum = stack.peek();
+                        stack.pop();
+                        double secondNum = stack.peek();
+                        stack.pop();
+                        stack.push(doOperation(secondNum, firstNum, tokens[i].charAt(0)));
                     }
-                    double firstNum = stack.peek();
-                    stack.pop();
-                    double secondNum = stack.peek();
-                    stack.pop();
-                    stack.push(doOperation(secondNum, firstNum, tokens[i].charAt(0)));
                 }
+
+
             }
-//            if (stack.size() != 1){
-//                System.out.println("Invalid expression");
-//            }
+            double result = stack.peek();
+            stack.pop();
 
+            outputField.setText(String.valueOf(result));
         }
-        double result = stack.peek();
-        stack.pop();
-
-        //System.out.println(RPN + "= RPN");
-
-        outputField.setText(String.valueOf(result));
-
+        catch (DividedByZeroException e) {
+            popAlert(e.getMessage());
+        }
+        catch (EmptyStackException e) {
+            popAlert("Wrong input");
+        }
+        catch (Exception e) {
+            popAlert("Unexpected error");
+        }
     }
 
 
