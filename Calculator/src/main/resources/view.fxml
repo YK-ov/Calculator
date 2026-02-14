@@ -57,7 +57,7 @@
             <Font size="31.0" />
          </font>
       </Button>
-      <TextField fx:id="outputField" layoutX="16.0" layoutY="57.0" prefHeight="20.0" prefWidth="535.0" />
+      <TextField fx:id="outputField" layoutX="7.0" layoutY="57.0" prefHeight="20.0" prefWidth="544.0" />
       <Button fx:id="buttonPlus" layoutX="14.0" layoutY="111.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="+">
          <font>
             <Font size="31.0" />
@@ -79,6 +79,31 @@
          </font>
       </Button>
       <Button fx:id="buttonDivide" layoutX="342.0" layoutY="111.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="/">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonOpenParenthesis" layoutX="14.0" layoutY="219.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="(">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonCloseParenthesis" layoutX="123.0" layoutY="219.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text=")">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonClear" layoutX="342.0" layoutY="219.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="CLR">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonDelete" layoutX="453.0" layoutY="219.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text="del">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonDot" layoutX="233.0" layoutY="219.0" mnemonicParsing="false" prefHeight="100.0" prefWidth="102.0" text=".">
          <font>
             <Font size="31.0" />
          </font>
