@@ -221,9 +221,11 @@ public class CalculatorController {
         buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                writtenOutput = outputField.getText().substring(0, outputField.getText().length() - 1);
+                if (!outputField.getText().isEmpty()){
+                    writtenOutput = outputField.getText().substring(0, outputField.getText().length() - 1);
 
-                outputField.setText(writtenOutput);
+                    outputField.setText(writtenOutput);
+                }
             }
         });
 
